@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deep Sea Star Clock</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Pretendard", sans-serif;
+      background: #020716;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .widget {
+      width: 260px;
+      height: 160px;
+      border-radius: 24px;
+      /* 초기 코드의 깊이감 있는 배경색 유지 */
+      background: linear-gradient(135deg, #0d1430 0%, #050a1e 100%);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      padding: 22px;
+      color: #e9f5ff;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* 텍스트 요소 레이어 */
+    .greeting { font-size: 13px; font-weight: 300; opacity: 0.9; z-index: 30; }
+    .content-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      flex-grow: 1;
+      z-index: 30;
+      margin-top: 5px;
+    }
+    .time-wrapper {
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #fff;
+      display: flex;
+      align-items: center; /* 수직 중앙 정렬 */
+      line-height: 1;
+    }
+    
+    /* 콜론 위치 세밀 조정 */
+    .colon { 
+      animation: blink 1.2s infinite; 
+      margin: 0 2px;
+      padding-bottom: 6px; /* 폰트 특성에 맞춰 시각적 중앙으로 올림 */
+    }
+    
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
+    
+    .date { 
+      font-size: 13px; 
+      opacity: 0.7; 
+      margin-top: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .whale-tag { position: absolute; left: 22px; bottom: 20px; font-size: 10px; opacity: 0.6; z-index: 30; display: flex; align-items: center; gap: 6px; }
+    .whale-dot { width: 6px; height: 6px; border-radius: 50%; background: #3fa4ff; box-shadow: 0 0 8px #3fa4ff; }
+
+    /* --- 전역 반짝이 배경 --- */
+    .star-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle var(--duration) infinite ease-in-out;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.3); }
+      50% { opacity: 0.7; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <div class="star-layer" id="starLayer"></div>
+
+    <div class="greeting" id="greetingText">안녕, 고래의 시간이에요</div>
+    
+    <div class="content-box">
+      <div class="time-wrapper">
+        <span id="hourText">00</span><span class="colon">:</span><span id="minText">00</span>
+      </div>
+      <div id="dateText" class="date"></div>
+    </div>
+
+    <div class="whale-tag">
+      <div class="whale-dot"></div>
+      <span>whale time</span>
+    </div>
+  </div>
+
+  <script>
+    // 전역 반짝이 별 생성 (30개로 확장)
+    const starLayer = document.getElementById('starLayer');
+    for (let i = 0; i < 30; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2 + 1;
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+      star.style.animationDelay = Math.random() * 5 + 's';
+      starLayer.appendChild(star);
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours();
+      const m = now.getMinutes();
+      const hourDisplay = h % 12 || 12;
+
+      document.getElementById("hourText").textContent = hourDisplay < 10 ? "0" + hourDisplay : hourDisplay;
+      document.getElementById("minText").textContent = m < 10 ? "0" + m : m;
+
+      const days = ["일", "월", "화", "수", "목", "금", "토"];
+      // 날짜 공백 최소화 (예: 2026.2.6(금))
+      const dateStr = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}(${days[now.getDay()]})`;
+      document.getElementById("dateText").textContent = dateStr;
+
+      let g = "고요한 밤바다, 고래와 함께 🌌";
+      if (h >= 5 && h < 11) g = "좋은 아침, 고래처럼 천천히 💙";
+      else if (h >= 11 && h < 17) g = "부드러운 오후 파도 위에서 🌊";
+      else if (h >= 17 && h < 21) g = "노을 진 바다, 고래의 시간 ✨";
+      document.getElementById("greetingText").textContent = g;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
