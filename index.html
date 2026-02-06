@@ -2,16 +2,15 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Deep Sea Star Clock</title>
+  <title>Rounded Whale Clock Light</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <style>
-    /* 여백 완전 제거 및 배경 통일 */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
       font-family: "Pretendard", sans-serif;
-      /* 배경색을 위젯과 동일하게 맞춰서 경계선을 없앱니다 */
-      background: #050a1e; 
+      /* 노션 라이트 테마 배경과 일치시킴 */
+      background: #ffffff; 
       display: flex;
       align-items: center;
       justify-content: center;
@@ -21,11 +20,11 @@
     }
 
     .widget {
-      /* 노션 임베드 크기에 맞게 가득 채우기 */
-      width: 100%;
-      height: 100%;
-      /* 둥근 모서리는 노션 임베드 블록 자체가 조절하도록 제거하거나 유지 */
-      border-radius: 0; 
+      width: 94%; 
+      height: 92%;
+      /* 둥근 모서리 */
+      border-radius: 30px; 
+      /* 위젯 내부는 깊은 바다색 유지 (반짝임이 잘 보여야 하니까요!) */
       background: linear-gradient(135deg, #0d1430 0%, #050a1e 100%);
       padding: 24px;
       color: #e9f5ff;
@@ -33,13 +32,12 @@
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      /* 테두리 제거 (경계선 없애기) */
-      border: none;
+      /* 흰 배경에서 위젯을 돋보이게 하는 부드러운 그림자 */
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* 텍스트 요소 레이어 */
-    .greeting { font-size: 14px; font-weight: 300; opacity: 0.9; z-index: 30; }
-    
+    /* 텍스트 요소 */
+    .greeting { font-size: 13px; font-weight: 300; opacity: 0.9; z-index: 30; }
     .content-box {
       display: flex;
       flex-direction: column;
@@ -48,9 +46,8 @@
       flex-grow: 1;
       z-index: 30;
     }
-
     .time-wrapper {
-      font-size: 48px; /* 크기를 살짝 키웠습니다 */
+      font-size: 44px;
       font-weight: 700;
       letter-spacing: -0.03em;
       color: #fff;
@@ -58,36 +55,32 @@
       align-items: center; 
       line-height: 1;
     }
-    
     .colon { 
       animation: blink 1.2s infinite; 
       margin: 0 2px;
       padding-bottom: 6px; 
     }
-    
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
-    
     .date { 
-      font-size: 14px; 
+      font-size: 13px; 
       opacity: 0.7; 
-      margin-top: 6px;
+      margin-top: 4px;
       letter-spacing: -0.02em;
     }
-
     .whale-tag { 
       position: absolute; 
       left: 24px; 
-      bottom: 24px; 
-      font-size: 11px; 
+      bottom: 22px; 
+      font-size: 10px; 
       opacity: 0.6; 
       z-index: 30; 
       display: flex; 
       align-items: center; 
       gap: 6px; 
     }
-    .whale-dot { width: 7px; height: 7px; border-radius: 50%; background: #3fa4ff; box-shadow: 0 0 8px #3fa4ff; }
+    .whale-dot { width: 6px; height: 6px; border-radius: 50%; background: #3fa4ff; box-shadow: 0 0 8px #3fa4ff; }
 
-    /* --- 전역 반짝이 배경 --- */
+    /* 반짝이 배경 */
     .star-layer { position: absolute; inset: 0; z-index: 1; }
     .star {
       position: absolute;
@@ -105,16 +98,13 @@
 <body>
   <div class="widget">
     <div class="star-layer" id="starLayer"></div>
-
     <div class="greeting" id="greetingText">안녕, 고래의 시간이에요</div>
-    
     <div class="content-box">
       <div class="time-wrapper">
         <span id="hourText">00</span><span class="colon">:</span><span id="minText">00</span>
       </div>
       <div id="dateText" class="date"></div>
     </div>
-
     <div class="whale-tag">
       <div class="whale-dot"></div>
       <span>whale time</span>
@@ -123,10 +113,10 @@
 
   <script>
     const starLayer = document.getElementById('starLayer');
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 40; i++) {
       const star = document.createElement('div');
       star.className = 'star';
-      const size = Math.random() * 2 + 1;
+      const size = Math.random() * 2 + 0.5;
       star.style.width = size + 'px';
       star.style.height = size + 'px';
       star.style.top = Math.random() * 100 + '%';
@@ -141,10 +131,8 @@
       const h = now.getHours();
       const m = now.getMinutes();
       const hourDisplay = h % 12 || 12;
-
       document.getElementById("hourText").textContent = hourDisplay < 10 ? "0" + hourDisplay : hourDisplay;
       document.getElementById("minText").textContent = m < 10 ? "0" + m : m;
-
       const days = ["일", "월", "화", "수", "목", "금", "토"];
       const dateStr = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}(${days[now.getDay()]})`;
       document.getElementById("dateText").textContent = dateStr;
@@ -155,7 +143,6 @@
       else if (h >= 17 && h < 21) g = "노을 진 바다, 고래의 시간 ✨";
       document.getElementById("greetingText").textContent = g;
     }
-
     updateClock();
     setInterval(updateClock, 1000);
   </script>
