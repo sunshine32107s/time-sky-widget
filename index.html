@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Whale Delivery Clock Widget</title>
-  <!-- 인사말과 날짜는 귀여운 고운돋움을 유지하기 위해 링크 배치 -->
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum:wght@400;700&display=swap" rel="stylesheet" />
-  <!-- 시간 전용 폰트로 Pretendard 복원 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +33,6 @@
       border: 1px solid #e2e8f0;
     }
 
-    /* 인사말과 하단 태그는 고운돋움 폰트 유지 */
     .greeting, .whale-tag { 
       font-family: 'Gowun Dodum', sans-serif;
     }
@@ -56,15 +53,14 @@
       z-index: 30;
     }
     
-    /* 🛠️ 시간과 날짜는 원래 타임 위젯의 Pretendard 폰트 및 크기(44px)로 완벽 복원 */
     .time-wrapper, .date {
       font-family: "Pretendard", -apple-system, sans-serif;
     }
 
     .time-wrapper {
-      font-size: 44px; /* 원래 시계의 황금 크기로 조정 */
+      font-size: 44px; 
       font-weight: 700;
-      letter-spacing: -0.03em; /* 원래 시계의 자간 복원 */
+      letter-spacing: -0.03em; 
       color: #0c4a6e; 
       display: flex;
       align-items: center; 
@@ -74,7 +70,7 @@
     .colon { 
       animation: blink 1.2s infinite; 
       margin: 0 2px;
-      padding-bottom: 6px; /* 원래 시계의 땡땡이 위치 정렬 마진 복원 */
+      padding-bottom: 6px; 
     }
     
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
@@ -83,14 +79,14 @@
       font-size: 13px; 
       font-weight: 500;
       color: #334155; 
-      margin-top: 4px; /* 원래 시계 마진 복원 */
+      margin-top: 4px; 
       letter-spacing: -0.02em;
     }
     
     .whale-tag { 
       position: absolute; 
       left: 22px; 
-      bottom: 20px; 
+      bottom: 16px; 
       font-size: 11px; 
       font-weight: 700;
       color: #0369a1; 
@@ -100,32 +96,57 @@
       gap: 6px; 
     }
     
-    .whale-dot { 
-      width: 7px; 
-      height: 7px; 
-      border-radius: 50%; 
-      background: #0ea5e9; 
-      box-shadow: 0 0 6px #0ea5e9; 
+    /* 🐋 고래 아이콘이 부드럽게 위아래로 둥둥 뜨는 효과 */
+    .whale-icon {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      animation: floatWhale 3s infinite ease-in-out;
+    }
+    @keyframes floatWhale {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
 
-    /* 바다 물방울 반짝이 레이어 */
-    .star-layer { position: absolute; inset: 0; z-index: 1; }
-    .star {
+    /* 🧼 퐁퐁 솟아오르는 리얼 물방울(버블) 레이어 */
+    .bubble-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .bubble {
       position: absolute;
-      background: rgba(255, 255, 255, 0.6);
+      bottom: -20px; /* 화면 아래에서 출발 */
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.6); /* 투명한 비누방울 테두리 */
       border-radius: 50%;
-      opacity: 0;
-      animation: twinkle var(--duration) infinite ease-in-out;
+      animation: riseUp var(--duration) infinite linear;
     }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.4) translateY(0px); }
-      50% { opacity: 0.9; transform: scale(1.1) translateY(-5px); }
+    
+    /* 🛠️ 위로 퐁퐁 솟구치며 좌우로 일렁이는 역동적인 애니메이션 */
+    @keyframes riseUp {
+      0% {
+        transform: translateY(0) translateX(0) scale(0.6);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      50% {
+        /* 중간쯤 갔을 때 좌측으로 살짝 흔들림 */
+        transform: translateY(-50vh) translateX(-15px) scale(1);
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        /* 위로 다 올라가서 퐁! 터지며 사라짐 */
+        transform: translateY(-110vh) translateX(10px) scale(0.8);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
   <div class="widget">
-    <div class="star-layer" id="starLayer"></div>
+    <!-- 물방울 레이어로 변경 -->
+    <div class="bubble-layer" id="bubbleLayer"></div>
     <div class="greeting" id="greetingText">안녕, 고래의 시간이에요</div>
     <div class="content-box">
       <div class="time-wrapper">
@@ -134,24 +155,36 @@
       <div id="dateText" class="date"></div>
     </div>
     <div class="whale-tag">
-      <div class="whale-dot"></div>
+      <!-- 🐋 점 대신 실제 whale_m.gif 아이콘이 둥둥 뜨게 배치 -->
+      <img src="whale_m.gif" alt="whale" className="whale-icon" />
       <span>whale carrier clock</span>
     </div>
   </div>
 
   <script>
-    const starLayer = document.getElementById('starLayer');
-    for (let i = 0; i < 25; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      const size = Math.random() * 3 + 1;
-      star.style.width = size + 'px';
-      star.style.height = size + 'px';
-      star.style.top = Math.random() * 100 + '%';
-      star.style.left = Math.random() * 100 + '%';
-      star.style.setProperty('--duration', (Math.random() * 4 + 3) + 's');
-      star.style.animationDelay = Math.random() * 4 + 's';
-      starLayer.appendChild(star);
+    // 🛠️ 랜덤하게 크기와 속도가 다른 물방울 퐁퐁 생성 스크립트
+    const bubbleLayer = document.getElementById('bubbleLayer');
+    const bubbleCount = 20; // 화면에 떠다닐 물방울 개수
+
+    for (let i = 0; i < bubbleCount; i++) {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      
+      // 물방울 크기를 4px에서 12px까지 다양하게 세팅해서 입체감 부여
+      const size = Math.random() * 8 + 4;
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      
+      // 가로 위치 랜덤 배치
+      bubble.style.left = Math.random() * 100 + '%';
+      
+      // 솟아오르는 속도 다르게 세팅 (6초 ~ 11초 사이)
+      bubble.style.setProperty('--duration', (Math.random() * 5 + 6) + 's');
+      
+      // 출발 시간 분산시켜서 끊기지 않고 연속으로 퐁퐁 나옴
+      bubble.style.animationDelay = Math.random() * 8 + 's';
+      
+      bubbleLayer.appendChild(bubble);
     }
 
     function updateClock() {
@@ -160,9 +193,7 @@
       const m = now.getMinutes();
       const hourDisplay = h % 12 || 12;
       
-      // 🛠️ 시간 표시에 앞에 "0"이 붙지 않도록 문자열 변환 로직 제거 (숫자 그대로 노출)
       document.getElementById("hourText").textContent = hourDisplay;
-      // 분(Minute)은 시계 규칙상 0이 유지되어야 정상적으로 보입니다 (예: 3시 5분 -> 3:05)
       document.getElementById("minText").textContent = m < 10 ? "0" + m : m;
       
       const days = ["일", "월", "화", "수", "목", "금", "토"];
