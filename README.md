@@ -1,1 +1,1 @@
-# time-widget
+# time-sky-widget
