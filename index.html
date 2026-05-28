@@ -2,42 +2,47 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Rounded Whale Clock Light</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <title>Whale Delivery Clock Widget</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      font-family: "Pretendard", sans-serif;
-      /* 노션 라이트 테마 배경과 일치시킴 */
-      background: #ffffff; 
+      font-family: 'Gowun Dodum', sans-serif;
+      background: transparent; /* 노션 임베드 칸에 자연스럽게 얹어지도록 투명 처리 */
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     .widget {
-      width: 94%; 
-      height: 92%;
-      /* 둥근 모서리 */
-      border-radius: 30px; 
-      /* 위젯 내부는 깊은 바다색 유지 (반짝임이 잘 보여야 하니까요!) */
-      background: linear-gradient(135deg, #0d1430 0%, #050a1e 100%);
-      padding: 24px;
-      color: #e9f5ff;
+      width: 96%; 
+      height: 94%;
+      border-radius: 24px; 
+      /* 🎨 배달원 웹사이트와 100% 일치하는 파스텔톤 그라데이션 주입 */
+      background: linear-gradient(to top right, #bae6fd, #eff6ff, #a7f3d0);
+      padding: 22px;
+      /* 글자색을 선명하고 짙은 슬레이트 딥블루로 변경하여 가독성 강화 */
+      color: #0f172a;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      /* 흰 배경에서 위젯을 돋보이게 하는 부드러운 그림자 */
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e2e8f0;
     }
 
-    /* 텍스트 요소 */
-    .greeting { font-size: 13px; font-weight: 300; opacity: 0.9; z-index: 30; }
+    /* 텍스트 요소 최적화 */
+    .greeting { 
+      font-size: 13px; 
+      font-weight: 700; 
+      color: #0369a1; /* 스카이블루 딥 톤 */
+      z-index: 30; 
+    }
+    
     .content-box {
       display: flex;
       flex-direction: column;
@@ -46,52 +51,66 @@
       flex-grow: 1;
       z-index: 30;
     }
+    
     .time-wrapper {
-      font-size: 44px;
+      font-size: 46px;
       font-weight: 700;
-      letter-spacing: -0.03em;
-      color: #fff;
+      letter-spacing: -0.02em;
+      color: #0c4a6e; /* 깊은 고래 블루 */
       display: flex;
       align-items: center; 
       line-height: 1;
     }
+    
     .colon { 
       animation: blink 1.2s infinite; 
-      margin: 0 2px;
-      padding-bottom: 6px; 
+      margin: 0 1px;
+      padding-bottom: 4px; 
     }
+    
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
+    
     .date { 
       font-size: 13px; 
-      opacity: 0.7; 
-      margin-top: 4px;
-      letter-spacing: -0.02em;
+      font-weight: 700;
+      color: #334155; 
+      margin-top: 6px;
+      letter-spacing: -0.01em;
     }
+    
     .whale-tag { 
       position: absolute; 
-      left: 24px; 
-      bottom: 22px; 
-      font-size: 10px; 
-      opacity: 0.6; 
+      left: 22px; 
+      bottom: 20px; 
+      font-size: 11px; 
+      font-weight: 700;
+      color: #0369a1; 
       z-index: 30; 
       display: flex; 
       align-items: center; 
       gap: 6px; 
     }
-    .whale-dot { width: 6px; height: 6px; border-radius: 50%; background: #3fa4ff; box-shadow: 0 0 8px #3fa4ff; }
+    
+    .whale-dot { 
+      width: 7px; 
+      height: 7px; 
+      border-radius: 50%; 
+      background: #0ea5e9; 
+      box-shadow: 0 0 6px #0ea5e9; 
+    }
 
-    /* 반짝이 배경 */
+    /* 바다 물방울 반짝이 레이어 */
     .star-layer { position: absolute; inset: 0; z-index: 1; }
     .star {
       position: absolute;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.6);
       border-radius: 50%;
       opacity: 0;
       animation: twinkle var(--duration) infinite ease-in-out;
     }
     @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.3); }
-      50% { opacity: 0.8; transform: scale(1); }
+      0%, 100% { opacity: 0; transform: scale(0.4) translateY(0px); }
+      50% { opacity: 0.9; transform: scale(1.1) translateY(-5px); }
     }
   </style>
 </head>
@@ -107,22 +126,22 @@
     </div>
     <div class="whale-tag">
       <div class="whale-dot"></div>
-      <span>whale time</span>
+      <span>whale carrier clock</span>
     </div>
   </div>
 
   <script>
     const starLayer = document.getElementById('starLayer');
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 25; i++) {
       const star = document.createElement('div');
       star.className = 'star';
-      const size = Math.random() * 2 + 0.5;
+      const size = Math.random() * 3 + 1;
       star.style.width = size + 'px';
       star.style.height = size + 'px';
       star.style.top = Math.random() * 100 + '%';
       star.style.left = Math.random() * 100 + '%';
-      star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-      star.style.animationDelay = Math.random() * 5 + 's';
+      star.style.setProperty('--duration', (Math.random() * 4 + 3) + 's');
+      star.style.animationDelay = Math.random() * 4 + 's';
       starLayer.appendChild(star);
     }
 
@@ -137,10 +156,11 @@
       const dateStr = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}(${days[now.getDay()]})`;
       document.getElementById("dateText").textContent = dateStr;
 
-      let g = "고요한 밤바다, 고래와 함께 🌌";
-      if (h >= 5 && h < 11) g = "좋은 아침, 고래처럼 천천히 💙";
-      else if (h >= 11 && h < 17) g = "부드러운 오후 파도 위에서 🌊";
-      else if (h >= 17 && h < 21) g = "노을 진 바다, 고래의 시간 ✨";
+      // 🧶 고래 도안 배달원 전용 아기자기한 멘트 세팅
+      let g = "포근한 밤, 오늘도 뜨개 수고하셨어요 🌌";
+      if (h >= 5 && h < 11) g = "기분 좋은 아침, 코 늘리러 가볼까요? 🧶";
+      else if (h >= 11 && h < 17) g = "나른한 오후, 차 한 잔과 즐거운 뜨개 타임 ☕";
+      else if (h >= 17 && h < 21) g = "노을빛 바다, 배달원이 도안 대기 중이에요 ✨";
       document.getElementById("greetingText").textContent = g;
     }
     updateClock();
