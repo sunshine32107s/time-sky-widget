@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>Whale Delivery Clock Widget</title>
+  <!-- 인사말과 날짜는 귀여운 고운돋움을 유지하기 위해 링크 배치 -->
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- 시간 전용 폰트로 Pretendard 복원 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      font-family: 'Gowun Dodum', sans-serif;
-      background: transparent; /* 노션 임베드 칸에 자연스럽게 얹어지도록 투명 처리 */
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -23,10 +25,8 @@
       width: 96%; 
       height: 94%;
       border-radius: 24px; 
-      /* 🎨 배달원 웹사이트와 100% 일치하는 파스텔톤 그라데이션 주입 */
       background: linear-gradient(to top right, #bae6fd, #eff6ff, #a7f3d0);
       padding: 22px;
-      /* 글자색을 선명하고 짙은 슬레이트 딥블루로 변경하여 가독성 강화 */
       color: #0f172a;
       display: flex;
       flex-direction: column;
@@ -35,11 +35,15 @@
       border: 1px solid #e2e8f0;
     }
 
-    /* 텍스트 요소 최적화 */
+    /* 인사말과 하단 태그는 고운돋움 폰트 유지 */
+    .greeting, .whale-tag { 
+      font-family: 'Gowun Dodum', sans-serif;
+    }
+
     .greeting { 
       font-size: 13px; 
       font-weight: 700; 
-      color: #0369a1; /* 스카이블루 딥 톤 */
+      color: #0369a1; 
       z-index: 30; 
     }
     
@@ -52,11 +56,16 @@
       z-index: 30;
     }
     
+    /* 🛠️ 시간과 날짜는 원래 타임 위젯의 Pretendard 폰트 및 크기(44px)로 완벽 복원 */
+    .time-wrapper, .date {
+      font-family: "Pretendard", -apple-system, sans-serif;
+    }
+
     .time-wrapper {
-      font-size: 46px;
+      font-size: 44px; /* 원래 시계의 황금 크기로 조정 */
       font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #0c4a6e; /* 깊은 고래 블루 */
+      letter-spacing: -0.03em; /* 원래 시계의 자간 복원 */
+      color: #0c4a6e; 
       display: flex;
       align-items: center; 
       line-height: 1;
@@ -64,18 +73,18 @@
     
     .colon { 
       animation: blink 1.2s infinite; 
-      margin: 0 1px;
-      padding-bottom: 4px; 
+      margin: 0 2px;
+      padding-bottom: 6px; /* 원래 시계의 땡땡이 위치 정렬 마진 복원 */
     }
     
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
     
     .date { 
       font-size: 13px; 
-      font-weight: 700;
+      font-weight: 500;
       color: #334155; 
-      margin-top: 6px;
-      letter-spacing: -0.01em;
+      margin-top: 4px; /* 원래 시계 마진 복원 */
+      letter-spacing: -0.02em;
     }
     
     .whale-tag { 
@@ -150,13 +159,16 @@
       const h = now.getHours();
       const m = now.getMinutes();
       const hourDisplay = h % 12 || 12;
-      document.getElementById("hourText").textContent = hourDisplay < 10 ? "0" + hourDisplay : hourDisplay;
+      
+      // 🛠️ 시간 표시에 앞에 "0"이 붙지 않도록 문자열 변환 로직 제거 (숫자 그대로 노출)
+      document.getElementById("hourText").textContent = hourDisplay;
+      // 분(Minute)은 시계 규칙상 0이 유지되어야 정상적으로 보입니다 (예: 3시 5분 -> 3:05)
       document.getElementById("minText").textContent = m < 10 ? "0" + m : m;
+      
       const days = ["일", "월", "화", "수", "목", "금", "토"];
       const dateStr = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}(${days[now.getDay()]})`;
       document.getElementById("dateText").textContent = dateStr;
 
-      // 🧶 고래 도안 배달원 전용 아기자기한 멘트 세팅
       let g = "포근한 밤, 오늘도 뜨개 수고하셨어요 🌌";
       if (h >= 5 && h < 11) g = "기분 좋은 아침, 코 늘리러 가볼까요? 🧶";
       else if (h >= 11 && h < 17) g = "나른한 오후, 차 한 잔과 즐거운 뜨개 타임 ☕";
