@@ -95,18 +95,6 @@
       align-items: center; 
       gap: 6px; 
     }
-    
-    /* 🐋 고래 아이콘이 부드럽게 위아래로 둥둥 뜨는 효과 */
-    .whale-icon {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      animation: floatWhale 3s infinite ease-in-out;
-    }
-    @keyframes floatWhale {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
 
     /* 🧼 퐁퐁 솟아오르는 리얼 물방울(버블) 레이어 */
     .bubble-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
@@ -155,8 +143,6 @@
       <div id="dateText" class="date"></div>
     </div>
     <div class="whale-tag">
-      <!-- 🐋 점 대신 실제 whale_m.gif 아이콘이 둥둥 뜨게 배치 -->
-      <img src="whale_m.gif" alt="whale" className="whale-icon" />
       <span>whale carrier clock</span>
     </div>
   </div>
